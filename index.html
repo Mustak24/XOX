@@ -1,0 +1,205 @@
+<html>
+
+<head>
+  <title>XOX</title>
+  <style>
+    html,
+    body {
+      margin: 0%;
+      width: 100%;
+      height: 100%;
+      perspective: 1000px;
+      gap: 20px;
+      background-image: linear-gradient(to bottom left, rgb(144, 144, 144), rgb(52, 52, 52),
+          rgb(36, 36, 36), rgb(52, 52, 52), rgb(144, 144, 144));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    div.main {
+      border-radius: 5px;
+      border: 7px solid black;
+      padding: 2px;
+    }
+
+    div.row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      div.box {
+        transform-style: preserve-3d;
+        transition: 1s linear;
+        aspect-ratio: 1;
+        width: 100px;
+        border: 0px solid black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+
+        .b {
+          font-size: 40px;
+          border-radius: 2px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          backface-visibility: visible;
+          position: absolute;
+          transition: hover 1s linear, active 10ms linear;
+          aspect-ratio: 1;
+          width: 90px;
+          background-color: aqua;
+          border: 1px solid black;
+        }
+        .b:hover {scale: 1.05;}
+        .b:active {scale: 0.95;}
+      }
+    }
+
+    button {
+      padding: 10px 25px;
+      border-radius: 8px;
+      box-shadow: 0p 0px 10px rgb(0, 255, 55);
+      background-color: rgb(0, 255, 55);
+      color: aliceblue;
+    }
+    button:hover {scale: 1.05;}
+    button:active {scale: 0.95;}
+    
+  </style>
+</head>
+
+<body>
+
+  <div>
+    <h2 id="hading" style="text-shadow: 0px 0px 8px white; color: antiquewhite;">
+      WELCOME
+    </h2>
+  </div>
+
+  <div class="main" style="transform-style: preserve-3d;">
+
+    <div class="row" style="transform-style: preserve-3d;">
+      <div class="box">
+        <span onclick="play(1)" class="b"></span>
+      </div>
+      <div class="box">
+        <span onclick="play(2)" class="b"></span>
+      </div>
+      <div class="box">
+        <span onclick="play(3)" class="b"></span>
+      </div>
+    </div>
+
+    <div class="row" style="transform-style: preserve-3d;">
+      <div class="box">
+        <span onclick="play(4)" class="b"></span>
+      </div>
+      <div class="box">
+        <span onclick="play(5)" class="b"></span>
+      </div>
+      <div class="box">
+        <span onclick="play(6)" class="b"></span>
+      </div>
+    </div>
+
+    <div class="row" style="transform-style: preserve-3d;">
+      <div class="box">
+        <span onclick="play(7)" class="b"></span>
+      </div>
+      <div class="box">
+        <span onclick="play(8)" class="b"></span>
+      </div>
+      <div class="box">
+        <span onclick="play(9)" class="b"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <button onclick="Restart('R')">New Game</button>
+
+</body>
+
+<script>
+
+  const hading = document.getElementById("hading");
+  const spanf = document.getElementsByClassName("b");
+  const box = document.getElementsByClassName("box");
+  var round = 1;
+
+  const play = (x) => {
+
+    if (spanf[x - 1].textContent == "") {
+
+      if (round % 2 == 1) {
+        spanf[x - 1].textContent = "X";
+        spanf[x - 1].style.color = "black";
+      }
+      else {
+        spanf[x - 1].textContent = "O";
+        spanf[x - 1].style.color = "white";
+      }
+
+      round++;
+
+      if (
+        ((spanf[0].textContent == spanf[1].textContent && spanf[1].textContent == spanf[2].textContent) ||
+          (spanf[0].textContent == spanf[3].textContent && spanf[3].textContent == spanf[6].textContent) ||
+          (spanf[0].textContent == spanf[4].textContent && spanf[4].textContent == spanf[8].textContent)) && spanf[0].textContent != ""
+      ) {
+        hading.textContent = `${spanf[0].textContent} PLAYER IS WIN`;
+        Restart("", spanf[0].textContent);
+      }
+
+      else if (
+        ((spanf[3].textContent == spanf[4].textContent && spanf[4].textContent == spanf[5].textContent) ||
+          (spanf[1].textContent == spanf[4].textContent && spanf[4].textContent == spanf[7].textContent) ||
+          (spanf[2].textContent == spanf[4].textContent && spanf[4].textContent == spanf[6].textContent)) && spanf[4].textContent != ""
+      ) {
+        hading.textContent = `${spanf[4].textContent} PLAYER IS WIN`;
+        Restart("", spanf[4].textContent);
+      }
+
+      else if (
+        ((spanf[2].textContent == spanf[5].textContent && spanf[5].textContent == spanf[8].textContent) ||
+          (spanf[6].textContent == spanf[7].textContent && spanf[7].textContent == spanf[8].textContent)) && spanf[8].textContent != ""
+      ) {
+        hading.textContent = `${spanf[8].textContent} PLAYER IS WIN`;
+        Restart("", spanf[8].textContent);
+      }
+
+      else {
+        var draw;
+        for (draw = 0; draw < 9; draw++) {
+          if (spanf[draw].textContent == "") break;
+        }
+        if (draw > 8) {
+          alert("GAME DRAW");
+          Restart("R");
+        }
+      }
+    }
+    else alert("Wrong place");
+  }
+
+  var temp = 1;
+  const Restart = (Y, W) => {
+    for (let i = 0; i < 9; i++) {
+      box[i].style.transform = `rotateY(${temp * 180}deg)`;
+      if (Y == "R") {
+        spanf[i].textContent = ""
+        hading.textContent = "WELCOME"
+      }
+      else spanf[i].textContent = `${W}`;
+    }
+    temp++;
+    round = 1;
+  }
+
+</script>
+
+</html>
